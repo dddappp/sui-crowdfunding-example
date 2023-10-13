@@ -6,6 +6,7 @@
 module sui_crowdfunding_example::project_aggregate {
     use std::string::String;
     use sui::balance::Balance;
+    use sui::clock::Clock;
     use sui::sui::SUI;
     use sui::tx_context;
     use sui_crowdfunding_example::platform::Platform;
@@ -49,9 +50,11 @@ module sui_crowdfunding_example::project_aggregate {
 
     public entry fun start(
         project: project::Project,
+        clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let project_started = project_start_logic::verify(
+            clock,
             &project,
             ctx,
         );
@@ -67,10 +70,12 @@ module sui_crowdfunding_example::project_aggregate {
     public fun donate(
         project: &mut project::Project,
         amount: Balance<SUI>,
+        clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let donation_received = project_donate_logic::verify(
             &amount,
+            clock,
             project,
             ctx,
         );
@@ -87,10 +92,12 @@ module sui_crowdfunding_example::project_aggregate {
     public fun withdraw(
         project: &mut project::Project,
         amount: u64,
+        clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ): Balance<SUI> {
         let vault_withdrawn = project_withdraw_logic::verify(
             amount,
+            clock,
             project,
             ctx,
         );
@@ -106,9 +113,11 @@ module sui_crowdfunding_example::project_aggregate {
 
     public fun refund(
         project: &mut project::Project,
+        clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ): Balance<SUI> {
         let donation_refunded = project_refund_logic::verify(
+            clock,
             project,
             ctx,
         );

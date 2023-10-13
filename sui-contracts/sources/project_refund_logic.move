@@ -1,5 +1,6 @@
 module sui_crowdfunding_example::project_refund_logic {
     use sui::balance::Balance;
+    use sui::clock::Clock;
     use sui::sui::SUI;
     use sui::tx_context::{Self, TxContext};
     use sui_crowdfunding_example::donation::{Self, Donation};
@@ -9,6 +10,7 @@ module sui_crowdfunding_example::project_refund_logic {
     friend sui_crowdfunding_example::project_aggregate;
 
     public(friend) fun verify(
+        clock: &Clock,
         project: &project::Project,
         ctx: &TxContext,
     ): project::DonationRefunded {

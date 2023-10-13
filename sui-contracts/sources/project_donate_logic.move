@@ -1,5 +1,6 @@
 module sui_crowdfunding_example::project_donate_logic {
     use sui::balance::Balance;
+    use sui::clock::Clock;
     use sui::sui::SUI;
     use sui::tx_context::{Self, TxContext};
     use sui_crowdfunding_example::donation::{Self, Donation};
@@ -10,6 +11,7 @@ module sui_crowdfunding_example::project_donate_logic {
 
     public(friend) fun verify(
         amount: &Balance<SUI>,
+        clock: &Clock,
         project: &project::Project,
         ctx: &TxContext,
     ): project::DonationReceived {

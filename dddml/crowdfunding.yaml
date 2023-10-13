@@ -50,12 +50,19 @@ aggregates:
         event:
           name: ProjectStarted
           isObjectShared: true # Share the object after initialization.
+        parameters:
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
 
       Donate:
         shouldCallByReference: true
         parameters:
           Amount:
             type: Balance<SUI>
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
         event:
           name: DonationReceived
           properties:
@@ -66,12 +73,19 @@ aggregates:
         parameters:
           Amount:
             type: u64
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
         result:
           type: Balance<SUI>
         event:
           name: VaultWithdrawn
       Refund:
         shouldCallByReference: true
+        parameters:
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
         result:
           type: Balance<SUI>
         event:
