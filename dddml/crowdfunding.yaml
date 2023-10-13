@@ -1,0 +1,125 @@
+aggregates:
+  Project:
+    metadata:
+      Preprocessors: [ "MOVE_CRUD_IT" ]
+      CRUD_IT_NO_DELETE: true
+    id:
+      name: Id
+      type: UID
+
+    properties:
+      Owner:
+        type: address
+      Title:
+        type: String
+        length: 200
+      Description:
+        type: String
+        length: 2000
+      Target:
+        type: u64
+      Deadline:
+        type: u64
+      Image:
+        type: String
+        length: 200
+      Vault:
+        type: "Balance<SUI>"
+      Donations:
+        itemType: Donation
+
+    entities:
+      Donation:
+        id:
+          name: Donator
+          type: address
+        properties:
+          Amount:
+            type: u64
+
+    methods:
+      Create:
+        metadata:
+          CRUD_IT_EXPAND_PARAMETERS: true
+        parameters:
+          Platform:
+            referenceType: Platform
+            isMutableReference: true
+            eventPropertyName: PlatformId
+      Start:
+        event:
+          name: ProjectStarted
+          isObjectShared: true # Share the object after initialization.
+
+      Donate:
+        shouldCallByReference: true
+        parameters:
+          Amount:
+            type: Balance<SUI>
+        event:
+          name: DonationReceived
+          properties:
+            Amount:
+              type: u64
+      Withdraw:
+        shouldCallByReference: true
+        parameters:
+          Amount:
+            type: u64
+        result:
+          type: Balance<SUI>
+        event:
+          name: VaultWithdrawn
+      Refund:
+        shouldCallByReference: true
+        result:
+          type: Balance<SUI>
+        event:
+          name: DonationRefunded
+
+
+singletonObjects:
+  Platform:
+    friends: [ "Project.Create" ]
+    metadata:
+      Preprocessors: [ "MOVE_CRUD_IT" ]
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+    properties:
+      Name:
+        type: String
+        length: 200
+        defaultLogic:
+          Move:
+            'std::string::utf8(b"crowdfunding-platform-example")'
+      Projects:
+        itemType: ID #ObjectID
+        isList: true
+
+    methods:
+      "__Init__":
+        event:
+          isObjectShared: true # Share the object after initialization.
+
+      AddProject:
+        isInternal: true
+        shouldCallByReference: true
+        event:
+          name: ProjectAddedToPlatform
+        parameters:
+          ProjectId:
+            type: ID #ObjectID
+
+
+#typeDefinitions:
+#  Balance:
+#    moveType: "sui::balance::Balance"
+#    isResource: true
+#    defaultLogic:
+#      Move:
+#        'sui::balance::zero()'
+
+#  SUI:
+#    moveType: "sui::sui::SUI"
+
+
