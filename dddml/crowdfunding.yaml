@@ -61,8 +61,6 @@ aggregates:
             length: 2000
           Target:
             type: u64
-          Deadline:
-            type: u64
           Image:
             type: String
             length: 200

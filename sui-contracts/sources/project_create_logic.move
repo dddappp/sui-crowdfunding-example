@@ -13,7 +13,6 @@ module sui_crowdfunding_example::project_create_logic {
         title: String,
         description: String,
         target: u64,
-        deadline: u64,
         image: String,
         ctx: &mut TxContext,
     ): project::ProjectCreated {
@@ -24,7 +23,6 @@ module sui_crowdfunding_example::project_create_logic {
             title,
             description,
             target,
-            deadline,
             image,
         )
     }
@@ -39,7 +37,7 @@ module sui_crowdfunding_example::project_create_logic {
         let title = project_created::title(project_created);
         let description = project_created::description(project_created);
         let target = project_created::target(project_created);
-        let deadline = project_created::deadline(project_created);
+        let deadline = 0;
         let image = project_created::image(project_created);
         project::new_project(
             owner,

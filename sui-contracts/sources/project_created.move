@@ -34,10 +34,6 @@ module sui_crowdfunding_example::project_created {
         project::project_created_target(project_created)
     }
 
-    public fun deadline(project_created: &ProjectCreated): u64 {
-        project::project_created_deadline(project_created)
-    }
-
     public fun image(project_created: &ProjectCreated): String {
         project::project_created_image(project_created)
     }

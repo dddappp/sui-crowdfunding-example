@@ -167,7 +167,6 @@ module sui_crowdfunding_example::project {
         title: String,
         description: String,
         target: u64,
-        deadline: u64,
         image: String,
     }
 
@@ -199,10 +198,6 @@ module sui_crowdfunding_example::project {
         project_created.target
     }
 
-    public fun project_created_deadline(project_created: &ProjectCreated): u64 {
-        project_created.deadline
-    }
-
     public fun project_created_image(project_created: &ProjectCreated): String {
         project_created.image
     }
@@ -213,7 +208,6 @@ module sui_crowdfunding_example::project {
         title: String,
         description: String,
         target: u64,
-        deadline: u64,
         image: String,
     ): ProjectCreated {
         ProjectCreated {
@@ -223,7 +217,6 @@ module sui_crowdfunding_example::project {
             title,
             description,
             target,
-            deadline,
             image,
         }
     }

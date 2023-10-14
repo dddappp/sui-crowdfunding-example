@@ -22,7 +22,6 @@ module sui_crowdfunding_example::project_aggregate {
         title: String,
         description: String,
         target: u64,
-        deadline: u64,
         image: String,
         ctx: &mut tx_context::TxContext,
     ) {
@@ -31,7 +30,6 @@ module sui_crowdfunding_example::project_aggregate {
             title,
             description,
             target,
-            deadline,
             image,
             ctx,
         );
