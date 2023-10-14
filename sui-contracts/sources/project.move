@@ -270,18 +270,25 @@ module sui_crowdfunding_example::project {
     struct ProjectStarted has copy, drop {
         id: object::ID,
         version: u64,
+        deadline: u64,
     }
 
     public fun project_started_id(project_started: &ProjectStarted): object::ID {
         project_started.id
     }
 
+    public fun project_started_deadline(project_started: &ProjectStarted): u64 {
+        project_started.deadline
+    }
+
     public(friend) fun new_project_started<T>(
         project: &Project<T>,
+        deadline: u64,
     ): ProjectStarted {
         ProjectStarted {
             id: id(project),
             version: version(project),
+            deadline,
         }
     }
 

@@ -1,4 +1,5 @@
 module sui_crowdfunding_example::project_start_logic {
+    use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::{Self, TxContext};
     use sui_crowdfunding_example::donation::{Self, Donation};
@@ -7,13 +8,17 @@ module sui_crowdfunding_example::project_start_logic {
 
     friend sui_crowdfunding_example::project_aggregate;
 
+    const FIFTEEN_DAYS_IN_MS: u64 = 15 * 24 * 60 * 60 * 1000;
+
     public(friend) fun verify<T>(
         clock: &Clock,
         project: &project::Project<T>,
         ctx: &TxContext,
     ): project::ProjectStarted {
+        let deadline = clock::timestamp_ms(clock) + FIFTEEN_DAYS_IN_MS;
         project::new_project_started(
             project,
+            deadline,
         )
     }
 
@@ -22,9 +27,8 @@ module sui_crowdfunding_example::project_start_logic {
         project: project::Project<T>,
         ctx: &TxContext, // modify the reference to mutable if needed
     ): project::Project<T> {
-        let id = project::id(&project);
-        // ...
-        //
+        let deadline = project_started::deadline(project_started);
+        project::set_deadline(&mut project, deadline);
         project
     }
 

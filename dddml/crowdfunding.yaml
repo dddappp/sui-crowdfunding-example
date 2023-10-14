@@ -102,6 +102,9 @@ aggregates:
         event:
           name: ProjectStarted
           isObjectShared: true # Share the object after initialization.
+          properties:
+            deadline:
+              type: u64
 
       Donate:
         shouldCallByReference: true

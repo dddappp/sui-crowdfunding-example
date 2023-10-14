@@ -6,6 +6,9 @@ module sui_crowdfunding_example::project_update_logic {
 
     friend sui_crowdfunding_example::project_aggregate;
 
+    const NOT_STARTED: u64 = 0;
+    const EPROJECT_ALREADY_STARTED: u64 = 181;
+
     public(friend) fun verify<T>(
         title: String,
         description: String,
@@ -15,6 +18,8 @@ module sui_crowdfunding_example::project_update_logic {
         ctx: &TxContext,
     ): project::ProjectUpdated {
         let _ = ctx;
+        assert!(project::deadline(project) == NOT_STARTED, EPROJECT_ALREADY_STARTED);
+
         project::new_project_updated(
             project,
             title,
@@ -33,9 +38,8 @@ module sui_crowdfunding_example::project_update_logic {
         let description = project_updated::description(project_updated);
         let target = project_updated::target(project_updated);
         let image = project_updated::image(project_updated);
-        let id = project::id(&project);
         let _ = ctx;
-        let _ = id;
+
         project::set_title(&mut project, title);
         project::set_description(&mut project, description);
         project::set_target(&mut project, target);

@@ -2,11 +2,14 @@ module sui_crowdfunding_example::project_create_logic {
     use std::string::String;
     use sui::tx_context;
     use sui::tx_context::TxContext;
+    use sui_crowdfunding_example::platform_aggregate;
     use sui_crowdfunding_example::platform::{Self, Platform};
     use sui_crowdfunding_example::project;
     use sui_crowdfunding_example::project_created;
 
     friend sui_crowdfunding_example::project_aggregate;
+
+    const NOT_STARTED: u64 = 0;
 
     public(friend) fun verify<T>(
         platform: &mut Platform,
@@ -16,7 +19,6 @@ module sui_crowdfunding_example::project_create_logic {
         image: String,
         ctx: &mut TxContext,
     ): project::ProjectCreated {
-        let _ = ctx;
         project::new_project_created<T>(
             platform::id(platform),
             tx_context::sender(ctx),
@@ -32,14 +34,14 @@ module sui_crowdfunding_example::project_create_logic {
         platform: &mut Platform,
         ctx: &mut TxContext,
     ): project::Project<T> {
-        let platform_id = project_created::platform_id(project_created);
+        //let platform_id = project_created::platform_id(project_created);
         let owner = project_created::owner(project_created);
         let title = project_created::title(project_created);
         let description = project_created::description(project_created);
         let target = project_created::target(project_created);
-        let deadline = 0;
+        let deadline = NOT_STARTED;
         let image = project_created::image(project_created);
-        project::new_project(
+        let project = project::new_project<T>(
             owner,
             title,
             description,
@@ -47,7 +49,13 @@ module sui_crowdfunding_example::project_create_logic {
             deadline,
             image,
             ctx,
-        )
+        );
+        platform_aggregate::add_project(
+            platform,
+            project::id(&project),
+            ctx,
+        );
+        project
     }
 
 }

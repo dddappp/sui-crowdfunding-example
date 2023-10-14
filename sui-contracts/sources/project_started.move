@@ -12,4 +12,8 @@ module sui_crowdfunding_example::project_started {
         project::project_started_id(project_started)
     }
 
+    public fun deadline(project_started: &ProjectStarted): u64 {
+        project::project_started_deadline(project_started)
+    }
+
 }
