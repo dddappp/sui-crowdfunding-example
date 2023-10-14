@@ -15,9 +15,8 @@ module sui_crowdfunding_example::project_update_logic {
         target: u64,
         image: String,
         project: &project::Project<T>,
-        ctx: &TxContext,
+        _ctx: &TxContext,
     ): project::ProjectUpdated {
-        let _ = ctx;
         assert!(project::deadline(project) == NOT_STARTED, EPROJECT_ALREADY_STARTED);
 
         project::new_project_updated(
@@ -32,13 +31,12 @@ module sui_crowdfunding_example::project_update_logic {
     public(friend) fun mutate<T>(
         project_updated: &project::ProjectUpdated,
         project: project::Project<T>,
-        ctx: &TxContext, // modify the reference to mutable if needed
+        _ctx: &TxContext, // modify the reference to mutable if needed
     ): project::Project<T> {
         let title = project_updated::title(project_updated);
         let description = project_updated::description(project_updated);
         let target = project_updated::target(project_updated);
         let image = project_updated::image(project_updated);
-        let _ = ctx;
 
         project::set_title(&mut project, title);
         project::set_description(&mut project, description);

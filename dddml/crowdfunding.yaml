@@ -121,6 +121,8 @@ aggregates:
         event:
           name: DonationReceived
           properties:
+            Donator:
+              type: address
             Amount:
               type: u64
       Withdraw:
