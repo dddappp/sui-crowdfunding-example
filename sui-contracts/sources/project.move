@@ -207,7 +207,7 @@ module sui_crowdfunding_example::project {
         project_created.image
     }
 
-    public(friend) fun new_project_created(
+    public(friend) fun new_project_created<T>(
         platform_id: ID,
         owner: address,
         title: String,

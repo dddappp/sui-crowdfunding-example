@@ -18,7 +18,7 @@ module sui_crowdfunding_example::project_create_logic {
         ctx: &mut TxContext,
     ): project::ProjectCreated {
         let _ = ctx;
-        project::new_project_created(
+        project::new_project_created<T>(
             platform::id(platform),
             tx_context::sender(ctx),
             title,
