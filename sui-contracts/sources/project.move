@@ -9,7 +9,6 @@ module sui_crowdfunding_example::project {
     use sui::balance::Balance;
     use sui::event;
     use sui::object::{Self, ID, UID};
-    use sui::sui::SUI;
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
@@ -27,7 +26,7 @@ module sui_crowdfunding_example::project {
     const EINAPPROPRIATE_VERSION: u64 = 103;
     const EID_NOT_FOUND: u64 = 106;
 
-    struct Project has key {
+    struct Project<phantom T> has key {
         id: UID,
         version: u64,
         owner: address,
@@ -36,106 +35,106 @@ module sui_crowdfunding_example::project {
         target: u64,
         deadline: u64,
         image: String,
-        vault: Balance<SUI>,
+        vault: Balance<T>,
         donations: table::Table<address, Donation>,
     }
 
-    public fun id(project: &Project): object::ID {
+    public fun id<T>(project: &Project<T>): object::ID {
         object::uid_to_inner(&project.id)
     }
 
-    public fun version(project: &Project): u64 {
+    public fun version<T>(project: &Project<T>): u64 {
         project.version
     }
 
-    public fun owner(project: &Project): address {
+    public fun owner<T>(project: &Project<T>): address {
         project.owner
     }
 
-    public(friend) fun set_owner(project: &mut Project, owner: address) {
+    public(friend) fun set_owner<T>(project: &mut Project<T>, owner: address) {
         project.owner = owner;
     }
 
-    public fun title(project: &Project): String {
+    public fun title<T>(project: &Project<T>): String {
         project.title
     }
 
-    public(friend) fun set_title(project: &mut Project, title: String) {
+    public(friend) fun set_title<T>(project: &mut Project<T>, title: String) {
         assert!(std::string::length(&title) <= 200, EDATA_TOO_LONG);
         project.title = title;
     }
 
-    public fun description(project: &Project): String {
+    public fun description<T>(project: &Project<T>): String {
         project.description
     }
 
-    public(friend) fun set_description(project: &mut Project, description: String) {
+    public(friend) fun set_description<T>(project: &mut Project<T>, description: String) {
         assert!(std::string::length(&description) <= 2000, EDATA_TOO_LONG);
         project.description = description;
     }
 
-    public fun target(project: &Project): u64 {
+    public fun target<T>(project: &Project<T>): u64 {
         project.target
     }
 
-    public(friend) fun set_target(project: &mut Project, target: u64) {
+    public(friend) fun set_target<T>(project: &mut Project<T>, target: u64) {
         project.target = target;
     }
 
-    public fun deadline(project: &Project): u64 {
+    public fun deadline<T>(project: &Project<T>): u64 {
         project.deadline
     }
 
-    public(friend) fun set_deadline(project: &mut Project, deadline: u64) {
+    public(friend) fun set_deadline<T>(project: &mut Project<T>, deadline: u64) {
         project.deadline = deadline;
     }
 
-    public fun image(project: &Project): String {
+    public fun image<T>(project: &Project<T>): String {
         project.image
     }
 
-    public(friend) fun set_image(project: &mut Project, image: String) {
+    public(friend) fun set_image<T>(project: &mut Project<T>, image: String) {
         assert!(std::string::length(&image) <= 200, EDATA_TOO_LONG);
         project.image = image;
     }
 
-    public(friend) fun borrow_vault(project: &Project): &Balance<SUI> {
+    public(friend) fun borrow_vault<T>(project: &Project<T>): &Balance<T> {
         &project.vault
     }
 
-    public(friend) fun borrow_mut_vault(project: &mut Project): &mut Balance<SUI> {
+    public(friend) fun borrow_mut_vault<T>(project: &mut Project<T>): &mut Balance<T> {
         &mut project.vault
     }
 
-    public(friend) fun add_donation(project: &mut Project, donation: Donation) {
+    public(friend) fun add_donation<T>(project: &mut Project<T>, donation: Donation) {
         let key = donation::donator(&donation);
         assert!(!table::contains(&project.donations, key), EID_ALREADY_EXISTS);
         table::add(&mut project.donations, key, donation);
     }
 
-    public(friend) fun remove_donation(project: &mut Project, donator: address) {
+    public(friend) fun remove_donation<T>(project: &mut Project<T>, donator: address) {
         assert!(table::contains(&project.donations, donator), EID_NOT_FOUND);
         let donation = table::remove(&mut project.donations, donator);
         donation::drop_donation(donation);
     }
 
-    public(friend) fun borrow_mut_donation(project: &mut Project, donator: address): &mut Donation {
+    public(friend) fun borrow_mut_donation<T>(project: &mut Project<T>, donator: address): &mut Donation {
         table::borrow_mut(&mut project.donations, donator)
     }
 
-    public fun borrow_donation(project: &Project, donator: address): &Donation {
+    public fun borrow_donation<T>(project: &Project<T>, donator: address): &Donation {
         table::borrow(&project.donations, donator)
     }
 
-    public fun donations_contains(project: &Project, donator: address): bool {
+    public fun donations_contains<T>(project: &Project<T>, donator: address): bool {
         table::contains(&project.donations, donator)
     }
 
-    public fun donations_length(project: &Project): u64 {
+    public fun donations_length<T>(project: &Project<T>): u64 {
         table::length(&project.donations)
     }
 
-    public(friend) fun new_project(
+    public(friend) fun new_project<T>(
         owner: address,
         title: String,
         description: String,
@@ -143,7 +142,7 @@ module sui_crowdfunding_example::project {
         deadline: u64,
         image: String,
         ctx: &mut TxContext,
-    ): Project {
+    ): Project<T> {
         assert!(std::string::length(&title) <= 200, EDATA_TOO_LONG);
         assert!(std::string::length(&description) <= 2000, EDATA_TOO_LONG);
         assert!(std::string::length(&image) <= 200, EDATA_TOO_LONG);
@@ -258,8 +257,8 @@ module sui_crowdfunding_example::project {
         project_updated.image
     }
 
-    public(friend) fun new_project_updated(
-        project: &Project,
+    public(friend) fun new_project_updated<T>(
+        project: &Project<T>,
         title: String,
         description: String,
         target: u64,
@@ -284,8 +283,8 @@ module sui_crowdfunding_example::project {
         project_started.id
     }
 
-    public(friend) fun new_project_started(
-        project: &Project,
+    public(friend) fun new_project_started<T>(
+        project: &Project<T>,
     ): ProjectStarted {
         ProjectStarted {
             id: id(project),
@@ -307,8 +306,8 @@ module sui_crowdfunding_example::project {
         donation_received.amount
     }
 
-    public(friend) fun new_donation_received(
-        project: &Project,
+    public(friend) fun new_donation_received<T>(
+        project: &Project<T>,
         amount: u64,
     ): DonationReceived {
         DonationReceived {
@@ -332,8 +331,8 @@ module sui_crowdfunding_example::project {
         vault_withdrawn.amount
     }
 
-    public(friend) fun new_vault_withdrawn(
-        project: &Project,
+    public(friend) fun new_vault_withdrawn<T>(
+        project: &Project<T>,
         amount: u64,
     ): VaultWithdrawn {
         VaultWithdrawn {
@@ -357,8 +356,8 @@ module sui_crowdfunding_example::project {
         donation_refunded.amount
     }
 
-    public(friend) fun new_donation_refunded(
-        project: &Project,
+    public(friend) fun new_donation_refunded<T>(
+        project: &Project<T>,
         amount: u64,
     ): DonationRefunded {
         DonationRefunded {
@@ -369,42 +368,42 @@ module sui_crowdfunding_example::project {
     }
 
 
-    public(friend) fun transfer_object(project: Project, recipient: address) {
+    public(friend) fun transfer_object<T>(project: Project<T>, recipient: address) {
         assert!(project.version == 0, EINAPPROPRIATE_VERSION);
         transfer::transfer(project, recipient);
     }
 
-    public(friend) fun update_version_and_transfer_object(project: Project, recipient: address) {
+    public(friend) fun update_version_and_transfer_object<T>(project: Project<T>, recipient: address) {
         update_object_version(&mut project);
         transfer::transfer(project, recipient);
     }
 
-    public(friend) fun share_object(project: Project) {
+    public(friend) fun share_object<T>(project: Project<T>) {
         assert!(project.version == 0, EINAPPROPRIATE_VERSION);
         transfer::share_object(project);
     }
 
-    public(friend) fun update_version_and_share_object(project: Project) {
+    public(friend) fun update_version_and_share_object<T>(project: Project<T>) {
         update_object_version(&mut project);
         transfer::share_object(project);
     }
 
-    public(friend) fun freeze_object(project: Project) {
+    public(friend) fun freeze_object<T>(project: Project<T>) {
         assert!(project.version == 0, EINAPPROPRIATE_VERSION);
         transfer::freeze_object(project);
     }
 
-    public(friend) fun update_version_and_freeze_object(project: Project) {
+    public(friend) fun update_version_and_freeze_object<T>(project: Project<T>) {
         update_object_version(&mut project);
         transfer::freeze_object(project);
     }
 
-    public(friend) fun update_object_version(project: &mut Project) {
+    public(friend) fun update_object_version<T>(project: &mut Project<T>) {
         project.version = project.version + 1;
         //assert!(project.version != 0, EINAPPROPRIATE_VERSION);
     }
 
-    public(friend) fun drop_project(project: Project) {
+    public(friend) fun drop_project<T>(project: Project<T>) {
         let Project {
             id,
             version: _version,

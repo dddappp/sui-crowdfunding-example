@@ -1,7 +1,6 @@
 module sui_crowdfunding_example::project_donate_logic {
     use sui::balance::Balance;
     use sui::clock::Clock;
-    use sui::sui::SUI;
     use sui::tx_context::{Self, TxContext};
     use sui_crowdfunding_example::donation::{Self, Donation};
     use sui_crowdfunding_example::donation_received;
@@ -9,10 +8,10 @@ module sui_crowdfunding_example::project_donate_logic {
 
     friend sui_crowdfunding_example::project_aggregate;
 
-    public(friend) fun verify(
-        amount: &Balance<SUI>,
+    public(friend) fun verify<T>(
+        amount: &Balance<T>,
         clock: &Clock,
-        project: &project::Project,
+        project: &project::Project<T>,
         ctx: &TxContext,
     ): project::DonationReceived {
         project::new_donation_received(
@@ -21,10 +20,10 @@ module sui_crowdfunding_example::project_donate_logic {
         )
     }
 
-    public(friend) fun mutate(
+    public(friend) fun mutate<T>(
         donation_received: &project::DonationReceived,
-        amount: Balance<SUI>,
-        project: &mut project::Project,
+        amount: Balance<T>,
+        project: &mut project::Project<T>,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
         //todo let amount = donation_received::amount(donation_received);

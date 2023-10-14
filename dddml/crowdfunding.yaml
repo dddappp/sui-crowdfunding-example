@@ -23,7 +23,7 @@ aggregates:
         type: String
         length: 200
       Vault:
-        type: "Balance<SUI>"
+        type: "Balance<T>"
       Donations:
         itemType: Donation
 
@@ -94,7 +94,7 @@ aggregates:
         shouldCallByReference: true
         parameters:
           Amount:
-            type: Balance<SUI>
+            type: Balance<T>
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
@@ -110,7 +110,7 @@ aggregates:
             referenceType: Clock
             isIgnoredInEvent: true
         result:
-          type: Balance<SUI>
+          type: Balance<T>
         event:
           name: VaultWithdrawn
           properties:
@@ -123,7 +123,7 @@ aggregates:
             referenceType: Clock
             isIgnoredInEvent: true
         result:
-          type: Balance<SUI>
+          type: Balance<T>
         event:
           name: DonationRefunded
           properties:

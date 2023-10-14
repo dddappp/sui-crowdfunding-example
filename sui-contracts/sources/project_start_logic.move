@@ -7,9 +7,9 @@ module sui_crowdfunding_example::project_start_logic {
 
     friend sui_crowdfunding_example::project_aggregate;
 
-    public(friend) fun verify(
+    public(friend) fun verify<T>(
         clock: &Clock,
-        project: &project::Project,
+        project: &project::Project<T>,
         ctx: &TxContext,
     ): project::ProjectStarted {
         project::new_project_started(
@@ -17,11 +17,11 @@ module sui_crowdfunding_example::project_start_logic {
         )
     }
 
-    public(friend) fun mutate(
+    public(friend) fun mutate<T>(
         project_started: &project::ProjectStarted,
-        project: project::Project,
+        project: project::Project<T>,
         ctx: &TxContext, // modify the reference to mutable if needed
-    ): project::Project {
+    ): project::Project<T> {
         let id = project::id(&project);
         // ...
         //

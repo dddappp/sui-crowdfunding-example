@@ -6,12 +6,12 @@ module sui_crowdfunding_example::project_update_logic {
 
     friend sui_crowdfunding_example::project_aggregate;
 
-    public(friend) fun verify(
+    public(friend) fun verify<T>(
         title: String,
         description: String,
         target: u64,
         image: String,
-        project: &project::Project,
+        project: &project::Project<T>,
         ctx: &TxContext,
     ): project::ProjectUpdated {
         let _ = ctx;
@@ -24,11 +24,11 @@ module sui_crowdfunding_example::project_update_logic {
         )
     }
 
-    public(friend) fun mutate(
+    public(friend) fun mutate<T>(
         project_updated: &project::ProjectUpdated,
-        project: project::Project,
+        project: project::Project<T>,
         ctx: &TxContext, // modify the reference to mutable if needed
-    ): project::Project {
+    ): project::Project<T> {
         let title = project_updated::title(project_updated);
         let description = project_updated::description(project_updated);
         let target = project_updated::target(project_updated);

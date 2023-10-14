@@ -4,7 +4,6 @@ module sui_crowdfunding_example::project_refund_logic {
     use sui::clock::Clock;
     use sui::coin;
     use sui::coin::balance;
-    use sui::sui::SUI;
     use sui::tx_context::{Self, TxContext};
     use sui_crowdfunding_example::donation::{Self, Donation};
     use sui_crowdfunding_example::donation_refunded;
@@ -12,9 +11,9 @@ module sui_crowdfunding_example::project_refund_logic {
 
     friend sui_crowdfunding_example::project_aggregate;
 
-    public(friend) fun verify(
+    public(friend) fun verify<T>(
         clock: &Clock,
-        project: &project::Project,
+        project: &project::Project<T>,
         ctx: &TxContext,
     ): project::DonationRefunded {
         project::new_donation_refunded(
@@ -23,11 +22,11 @@ module sui_crowdfunding_example::project_refund_logic {
         )
     }
 
-    public(friend) fun mutate(
+    public(friend) fun mutate<T>(
         donation_refunded: &project::DonationRefunded,
-        project: &mut project::Project,
+        project: &mut project::Project<T>,
         ctx: &TxContext, // modify the reference to mutable if needed
-    ): Balance<SUI> {
+    ): Balance<T> {
         let id = project::id(project);
         // ...
         //

@@ -8,7 +8,7 @@ module sui_crowdfunding_example::project_create_logic {
 
     friend sui_crowdfunding_example::project_aggregate;
 
-    public(friend) fun verify(
+    public(friend) fun verify<T>(
         platform: &mut Platform,
         title: String,
         description: String,
@@ -29,11 +29,11 @@ module sui_crowdfunding_example::project_create_logic {
         )
     }
 
-    public(friend) fun mutate(
+    public(friend) fun mutate<T>(
         project_created: &project::ProjectCreated,
         platform: &mut Platform,
         ctx: &mut TxContext,
-    ): project::Project {
+    ): project::Project<T> {
         let platform_id = project_created::platform_id(project_created);
         let owner = project_created::owner(project_created);
         let title = project_created::title(project_created);
