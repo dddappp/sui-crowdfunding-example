@@ -352,11 +352,16 @@ module sui_crowdfunding_example::project {
     struct DonationRefunded has copy, drop {
         id: object::ID,
         version: u64,
+        donator: address,
         amount: u64,
     }
 
     public fun donation_refunded_id(donation_refunded: &DonationRefunded): object::ID {
         donation_refunded.id
+    }
+
+    public fun donation_refunded_donator(donation_refunded: &DonationRefunded): address {
+        donation_refunded.donator
     }
 
     public fun donation_refunded_amount(donation_refunded: &DonationRefunded): u64 {
@@ -365,11 +370,13 @@ module sui_crowdfunding_example::project {
 
     public(friend) fun new_donation_refunded<T>(
         project: &Project<T>,
+        donator: address,
         amount: u64,
     ): DonationRefunded {
         DonationRefunded {
             id: id(project),
             version: version(project),
+            donator,
             amount,
         }
     }

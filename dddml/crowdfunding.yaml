@@ -157,6 +157,8 @@ aggregates:
         event:
           name: DonationRefunded
           properties:
+            Donator:
+              type: address
             Amount:
               type: u64
 

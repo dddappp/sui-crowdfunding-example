@@ -12,6 +12,10 @@ module sui_crowdfunding_example::donation_refunded {
         project::donation_refunded_id(donation_refunded)
     }
 
+    public fun donator(donation_refunded: &DonationRefunded): address {
+        project::donation_refunded_donator(donation_refunded)
+    }
+
     public fun amount(donation_refunded: &DonationRefunded): u64 {
         project::donation_refunded_amount(donation_refunded)
     }

@@ -32,16 +32,17 @@ module sui_crowdfunding_example::project_refund_logic {
         let donation = project::borrow_donation(project, donator);
         project::new_donation_refunded(
             project,
+            donator,
             donation::amount(donation),
         )
     }
 
     public(friend) fun mutate<T>(
-        _donation_refunded: &project::DonationRefunded,
+        donation_refunded: &project::DonationRefunded,
         project: &mut project::Project<T>,
-        ctx: &TxContext, // modify the reference to mutable if needed
+        _ctx: &TxContext, // modify the reference to mutable if needed
     ): Balance<T> {
-        let donator = tx_context::sender(ctx);
+        let donator = donation_refunded::donator(donation_refunded); // or tx_context::sender(ctx);
         let donation = project::borrow_donation(project, donator);
         let amount = donation::amount(donation);
         let vault = project::borrow_mut_vault(project);
