@@ -13,10 +13,6 @@ module sui_crowdfunding_example::project_updated {
         project::project_updated_id(project_updated)
     }
 
-    public fun owner(project_updated: &ProjectUpdated): address {
-        project::project_updated_owner(project_updated)
-    }
-
     public fun title(project_updated: &ProjectUpdated): String {
         project::project_updated_title(project_updated)
     }
@@ -27,10 +23,6 @@ module sui_crowdfunding_example::project_updated {
 
     public fun target(project_updated: &ProjectUpdated): u64 {
         project::project_updated_target(project_updated)
-    }
-
-    public fun deadline(project_updated: &ProjectUpdated): u64 {
-        project::project_updated_deadline(project_updated)
     }
 
     public fun image(project_updated: &ProjectUpdated): String {

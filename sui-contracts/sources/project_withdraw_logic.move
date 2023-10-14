@@ -10,7 +10,6 @@ module sui_crowdfunding_example::project_withdraw_logic {
     friend sui_crowdfunding_example::project_aggregate;
 
     public(friend) fun verify(
-        amount: u64,
         clock: &Clock,
         project: &project::Project,
         ctx: &TxContext,

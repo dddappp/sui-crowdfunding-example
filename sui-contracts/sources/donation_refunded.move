@@ -12,4 +12,8 @@ module sui_crowdfunding_example::donation_refunded {
         project::donation_refunded_id(donation_refunded)
     }
 
+    public fun amount(donation_refunded: &DonationRefunded): u64 {
+        project::donation_refunded_amount(donation_refunded)
+    }
+
 }

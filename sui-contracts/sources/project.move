@@ -15,11 +15,11 @@ module sui_crowdfunding_example::project {
     use sui::tx_context::TxContext;
     use sui_crowdfunding_example::donation::{Self, Donation};
     friend sui_crowdfunding_example::project_create_logic;
+    friend sui_crowdfunding_example::project_update_logic;
     friend sui_crowdfunding_example::project_start_logic;
     friend sui_crowdfunding_example::project_donate_logic;
     friend sui_crowdfunding_example::project_withdraw_logic;
     friend sui_crowdfunding_example::project_refund_logic;
-    friend sui_crowdfunding_example::project_update_logic;
     friend sui_crowdfunding_example::project_aggregate;
 
     const EID_ALREADY_EXISTS: u64 = 101;
@@ -229,6 +229,52 @@ module sui_crowdfunding_example::project {
         }
     }
 
+    struct ProjectUpdated has copy, drop {
+        id: object::ID,
+        version: u64,
+        title: String,
+        description: String,
+        target: u64,
+        image: String,
+    }
+
+    public fun project_updated_id(project_updated: &ProjectUpdated): object::ID {
+        project_updated.id
+    }
+
+    public fun project_updated_title(project_updated: &ProjectUpdated): String {
+        project_updated.title
+    }
+
+    public fun project_updated_description(project_updated: &ProjectUpdated): String {
+        project_updated.description
+    }
+
+    public fun project_updated_target(project_updated: &ProjectUpdated): u64 {
+        project_updated.target
+    }
+
+    public fun project_updated_image(project_updated: &ProjectUpdated): String {
+        project_updated.image
+    }
+
+    public(friend) fun new_project_updated(
+        project: &Project,
+        title: String,
+        description: String,
+        target: u64,
+        image: String,
+    ): ProjectUpdated {
+        ProjectUpdated {
+            id: id(project),
+            version: version(project),
+            title,
+            description,
+            target,
+            image,
+        }
+    }
+
     struct ProjectStarted has copy, drop {
         id: object::ID,
         version: u64,
@@ -300,78 +346,25 @@ module sui_crowdfunding_example::project {
     struct DonationRefunded has copy, drop {
         id: object::ID,
         version: u64,
+        amount: u64,
     }
 
     public fun donation_refunded_id(donation_refunded: &DonationRefunded): object::ID {
         donation_refunded.id
     }
 
+    public fun donation_refunded_amount(donation_refunded: &DonationRefunded): u64 {
+        donation_refunded.amount
+    }
+
     public(friend) fun new_donation_refunded(
         project: &Project,
+        amount: u64,
     ): DonationRefunded {
         DonationRefunded {
             id: id(project),
             version: version(project),
-        }
-    }
-
-    struct ProjectUpdated has copy, drop {
-        id: object::ID,
-        version: u64,
-        owner: address,
-        title: String,
-        description: String,
-        target: u64,
-        deadline: u64,
-        image: String,
-    }
-
-    public fun project_updated_id(project_updated: &ProjectUpdated): object::ID {
-        project_updated.id
-    }
-
-    public fun project_updated_owner(project_updated: &ProjectUpdated): address {
-        project_updated.owner
-    }
-
-    public fun project_updated_title(project_updated: &ProjectUpdated): String {
-        project_updated.title
-    }
-
-    public fun project_updated_description(project_updated: &ProjectUpdated): String {
-        project_updated.description
-    }
-
-    public fun project_updated_target(project_updated: &ProjectUpdated): u64 {
-        project_updated.target
-    }
-
-    public fun project_updated_deadline(project_updated: &ProjectUpdated): u64 {
-        project_updated.deadline
-    }
-
-    public fun project_updated_image(project_updated: &ProjectUpdated): String {
-        project_updated.image
-    }
-
-    public(friend) fun new_project_updated(
-        project: &Project,
-        owner: address,
-        title: String,
-        description: String,
-        target: u64,
-        deadline: u64,
-        image: String,
-    ): ProjectUpdated {
-        ProjectUpdated {
-            id: id(project),
-            version: version(project),
-            owner,
-            title,
-            description,
-            target,
-            deadline,
-            image,
+            amount,
         }
     }
 
@@ -433,6 +426,10 @@ module sui_crowdfunding_example::project {
         event::emit(project_created);
     }
 
+    public(friend) fun emit_project_updated(project_updated: ProjectUpdated) {
+        event::emit(project_updated);
+    }
+
     public(friend) fun emit_project_started(project_started: ProjectStarted) {
         event::emit(project_started);
     }
@@ -447,10 +444,6 @@ module sui_crowdfunding_example::project {
 
     public(friend) fun emit_donation_refunded(donation_refunded: DonationRefunded) {
         event::emit(donation_refunded);
-    }
-
-    public(friend) fun emit_project_updated(project_updated: ProjectUpdated) {
-        event::emit(project_updated);
     }
 
 }

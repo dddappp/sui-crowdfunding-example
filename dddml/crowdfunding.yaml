@@ -1,12 +1,11 @@
 aggregates:
   Project:
-    metadata:
-      Preprocessors: [ "MOVE_CRUD_IT" ]
-      CRUD_IT_NO_DELETE: true
     id:
       name: Id
       type: UID
-
+#    metadata:
+#      Preprocessors: [ "MOVE_CRUD_IT" ]
+#      CRUD_IT_NO_DELETE: true
     properties:
       Owner:
         type: address
@@ -39,13 +38,49 @@ aggregates:
 
     methods:
       Create:
-        metadata:
-          CRUD_IT_EXPAND_PARAMETERS: true
+#        metadata:
+#          CRUD_IT_EXPAND_PARAMETERS: true
+        isCreationCommand: true
         parameters:
           Platform:
             referenceType: Platform
             isMutableReference: true
             eventPropertyName: PlatformId
+          Title:
+            type: String
+            length: 200
+          Description:
+            type: String
+            length: 2000
+          Target:
+            type: u64
+          Deadline:
+            type: u64
+          Image:
+            type: String
+            length: 200
+        event:
+          name: ProjectCreated
+          properties:
+            Owner:
+              type: address
+              sequenceNumber: 1
+      Update:
+        parameters:
+          Title:
+            type: String
+            length: 200
+          Description:
+            type: String
+            length: 2000
+          Target:
+            type: u64
+          Image:
+            type: String
+            length: 200
+        event:
+          name: ProjectUpdated
+
       Start:
         event:
           name: ProjectStarted
@@ -71,8 +106,6 @@ aggregates:
       Withdraw:
         shouldCallByReference: true
         parameters:
-          Amount:
-            type: u64
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
@@ -80,6 +113,9 @@ aggregates:
           type: Balance<SUI>
         event:
           name: VaultWithdrawn
+          properties:
+            Amount:
+              type: u64
       Refund:
         shouldCallByReference: true
         parameters:
@@ -90,6 +126,9 @@ aggregates:
           type: Balance<SUI>
         event:
           name: DonationRefunded
+          properties:
+            Amount:
+              type: u64
 
 
 singletonObjects:

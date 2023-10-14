@@ -1,5 +1,6 @@
 module sui_crowdfunding_example::project_create_logic {
     use std::string::String;
+    use sui::tx_context;
     use sui::tx_context::TxContext;
     use sui_crowdfunding_example::platform::{Self, Platform};
     use sui_crowdfunding_example::project;
@@ -9,7 +10,6 @@ module sui_crowdfunding_example::project_create_logic {
 
     public(friend) fun verify(
         platform: &mut Platform,
-        owner: address,
         title: String,
         description: String,
         target: u64,
@@ -20,7 +20,7 @@ module sui_crowdfunding_example::project_create_logic {
         let _ = ctx;
         project::new_project_created(
             platform::id(platform),
-            owner,
+            tx_context::sender(ctx),
             title,
             description,
             target,

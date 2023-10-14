@@ -20,7 +20,6 @@ module sui_crowdfunding_example::project_aggregate {
 
     public entry fun create(
         platform: &mut Platform,
-        owner: address,
         title: String,
         description: String,
         target: u64,
@@ -30,7 +29,6 @@ module sui_crowdfunding_example::project_aggregate {
     ) {
         let project_created = project_create_logic::verify(
             platform,
-            owner,
             title,
             description,
             target,
@@ -46,6 +44,31 @@ module sui_crowdfunding_example::project_aggregate {
         project::set_project_created_id(&mut project_created, project::id(&project));
         project::transfer_object(project, tx_context::sender(ctx));
         project::emit_project_created(project_created);
+    }
+
+    public entry fun update(
+        project: project::Project,
+        title: String,
+        description: String,
+        target: u64,
+        image: String,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let project_updated = project_update_logic::verify(
+            title,
+            description,
+            target,
+            image,
+            &project,
+            ctx,
+        );
+        let updated_project = project_update_logic::mutate(
+            &project_updated,
+            project,
+            ctx,
+        );
+        project::update_version_and_transfer_object(updated_project, tx_context::sender(ctx));
+        project::emit_project_updated(project_updated);
     }
 
     public entry fun start(
@@ -91,12 +114,10 @@ module sui_crowdfunding_example::project_aggregate {
 
     public fun withdraw(
         project: &mut project::Project,
-        amount: u64,
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ): Balance<SUI> {
         let vault_withdrawn = project_withdraw_logic::verify(
-            amount,
             clock,
             project,
             ctx,
@@ -129,35 +150,6 @@ module sui_crowdfunding_example::project_aggregate {
         project::update_object_version(project);
         project::emit_donation_refunded(donation_refunded);
         refund_return
-    }
-
-    public entry fun update(
-        project: project::Project,
-        owner: address,
-        title: String,
-        description: String,
-        target: u64,
-        deadline: u64,
-        image: String,
-        ctx: &mut tx_context::TxContext,
-    ) {
-        let project_updated = project_update_logic::verify(
-            owner,
-            title,
-            description,
-            target,
-            deadline,
-            image,
-            &project,
-            ctx,
-        );
-        let updated_project = project_update_logic::mutate(
-            &project_updated,
-            project,
-            ctx,
-        );
-        project::update_version_and_transfer_object(updated_project, tx_context::sender(ctx));
-        project::emit_project_updated(project_updated);
     }
 
 }

@@ -1,6 +1,9 @@
 module sui_crowdfunding_example::project_refund_logic {
+    use sui::balance;
     use sui::balance::Balance;
     use sui::clock::Clock;
+    use sui::coin;
+    use sui::coin::balance;
     use sui::sui::SUI;
     use sui::tx_context::{Self, TxContext};
     use sui_crowdfunding_example::donation::{Self, Donation};
@@ -16,6 +19,7 @@ module sui_crowdfunding_example::project_refund_logic {
     ): project::DonationRefunded {
         project::new_donation_refunded(
             project,
+            balance::value(project::borrow_vault(project)),
         )
     }
 

@@ -5,11 +5,11 @@
 
 module sui_crowdfunding_example::donation {
     friend sui_crowdfunding_example::project_create_logic;
+    friend sui_crowdfunding_example::project_update_logic;
     friend sui_crowdfunding_example::project_start_logic;
     friend sui_crowdfunding_example::project_donate_logic;
     friend sui_crowdfunding_example::project_withdraw_logic;
     friend sui_crowdfunding_example::project_refund_logic;
-    friend sui_crowdfunding_example::project_update_logic;
     friend sui_crowdfunding_example::project;
 
     const EDATA_TOO_LONG: u64 = 102;
