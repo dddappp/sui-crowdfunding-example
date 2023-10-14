@@ -46,7 +46,7 @@ aggregates:
         isCreationCommand: true
         typeParameters:
           T: {}
-        aggregateTypeArguments:
+        objectTypeArguments:
           T: T
         parameters:
           Platform:
@@ -75,7 +75,7 @@ aggregates:
       Update:
         typeParameters:
           T: {}
-        aggregateTypeArguments:
+        objectTypeArguments:
           T: T
         parameters:
           Title:
@@ -95,7 +95,7 @@ aggregates:
       Start:
         typeParameters:
           T: {}
-        aggregateTypeArguments:
+        objectTypeArguments:
           T: T
         parameters:
           Clock:
@@ -109,7 +109,7 @@ aggregates:
         shouldCallByReference: true
         typeParameters:
           T: {}
-        aggregateTypeArguments:
+        objectTypeArguments:
           T: T
         parameters:
           Amount:
@@ -126,7 +126,7 @@ aggregates:
         shouldCallByReference: true
         typeParameters:
           T: {}
-        aggregateTypeArguments:
+        objectTypeArguments:
           T: T
         parameters:
           Clock:
@@ -143,7 +143,7 @@ aggregates:
         shouldCallByReference: true
         typeParameters:
           T: {}
-        aggregateTypeArguments:
+        objectTypeArguments:
           T: T
         parameters:
           Clock:
