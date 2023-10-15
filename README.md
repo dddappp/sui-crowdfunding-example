@@ -99,8 +99,8 @@ Then, in the `mutate` function, you need to modify the state of the objects, pri
 ---
 
 In [the model file](./dddml/crowdfunding.yaml), we define three methods, `Donate`, `Withdraw`, and `Refund`,
-which use Balance, a resource type, as type of parameters or return values.
-This makes these methods combinable. As a developer of Move, a "resource-oriented programming" language,
+which use `Balance`, a resource type, as type of parameters or return values.
+This makes these methods very combinable - as a developer of Move, a "resource-oriented programming" language,
 you will already know this.
 
 However, it's not easy to call them directly from clients.
@@ -175,7 +175,7 @@ Array [
     //...
 ```
 
-Record the package Id. of your published contract, as in the example above,
+Record the package Id of your published contract, as in the example above,
 the `packageId` is `0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3`;
 as well as the Id of the object that represents the crowdfunding platform, as in the example above,
 the `objectId` is `0xa38aa80e7b09ca8614ef402520deca48c4821d193ae507c97418898d7d49c05a`.
@@ -449,6 +449,8 @@ You can view the state of the crowdfunding `Platform` object like this:
 ```shell
 sui client object 0xa38aa80e7b09ca8614ef402520deca48c4821d193ae507c97418898d7d49c05a
 ```
+
+After the above test, you should see two project object IDs in the output message.
 
 #### Merge coins
 
