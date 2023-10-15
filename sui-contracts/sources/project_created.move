@@ -38,4 +38,8 @@ module sui_crowdfunding_example::project_created {
         project::project_created_image(project_created)
     }
 
+    public fun token_type(project_created: &ProjectCreated): String {
+        project::project_created_token_type(project_created)
+    }
+
 }

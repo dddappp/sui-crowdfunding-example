@@ -1,5 +1,7 @@
 module sui_crowdfunding_example::project_create_logic {
+    use std::string;
     use std::string::String;
+    use std::type_name;
     use sui::tx_context;
     use sui::tx_context::TxContext;
     use sui_crowdfunding_example::platform_aggregate;
@@ -19,6 +21,7 @@ module sui_crowdfunding_example::project_create_logic {
         image: String,
         ctx: &mut TxContext,
     ): project::ProjectCreated {
+        let token_type = type_name::into_string(type_name::get<T>());
         project::new_project_created<T>(
             platform::id(platform),
             tx_context::sender(ctx),
@@ -26,6 +29,7 @@ module sui_crowdfunding_example::project_create_logic {
             description,
             target,
             image,
+            string::from_ascii(token_type),
         )
     }
 

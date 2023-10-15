@@ -168,6 +168,7 @@ module sui_crowdfunding_example::project {
         description: String,
         target: u64,
         image: String,
+        token_type: String,
     }
 
     public fun project_created_id(project_created: &ProjectCreated): option::Option<object::ID> {
@@ -202,6 +203,10 @@ module sui_crowdfunding_example::project {
         project_created.image
     }
 
+    public fun project_created_token_type(project_created: &ProjectCreated): String {
+        project_created.token_type
+    }
+
     public(friend) fun new_project_created<T>(
         platform_id: ID,
         owner: address,
@@ -209,6 +214,7 @@ module sui_crowdfunding_example::project {
         description: String,
         target: u64,
         image: String,
+        token_type: String,
     ): ProjectCreated {
         ProjectCreated {
             id: option::none(),
@@ -218,6 +224,7 @@ module sui_crowdfunding_example::project {
             description,
             target,
             image,
+            token_type,
         }
     }
 

@@ -70,6 +70,10 @@ aggregates:
             Owner:
               type: address
               sequenceNumber: 1
+            TokenType:
+              type: String
+              length: 200
+              sequenceNumber: 30
       Update:
         typeParameters:
           T: {}
