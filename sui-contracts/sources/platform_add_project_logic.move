@@ -31,5 +31,4 @@ module sui_crowdfunding_example::platform_add_project_logic {
             platform::set_projects(platform, projects);
         };
     }
-
 }
