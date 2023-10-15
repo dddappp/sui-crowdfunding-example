@@ -1,5 +1,6 @@
 module sui_crowdfunding_example::project_update_logic {
     use std::string::String;
+    use sui::tx_context;
     use sui::tx_context::TxContext;
     use sui_crowdfunding_example::project;
     use sui_crowdfunding_example::project_updated;
@@ -8,6 +9,7 @@ module sui_crowdfunding_example::project_update_logic {
 
     const NOT_STARTED: u64 = 0;
     const EPROJECT_ALREADY_STARTED: u64 = 181;
+    const ENOT_PROJECT_OWNER: u64 = 186;
 
     public(friend) fun verify<T>(
         title: String,
@@ -15,9 +17,10 @@ module sui_crowdfunding_example::project_update_logic {
         target: u64,
         image: String,
         project: &project::Project<T>,
-        _ctx: &TxContext,
+        ctx: &TxContext,
     ): project::ProjectUpdated {
         assert!(project::deadline(project) == NOT_STARTED, EPROJECT_ALREADY_STARTED);
+        assert!(tx_context::sender(ctx) == project::owner(project), ENOT_PROJECT_OWNER);
 
         project::new_project_updated(
             project,
@@ -30,19 +33,17 @@ module sui_crowdfunding_example::project_update_logic {
 
     public(friend) fun mutate<T>(
         project_updated: &project::ProjectUpdated,
-        project: project::Project<T>,
+        project: &mut project::Project<T>,
         _ctx: &TxContext, // modify the reference to mutable if needed
-    ): project::Project<T> {
+    ) {
         let title = project_updated::title(project_updated);
         let description = project_updated::description(project_updated);
         let target = project_updated::target(project_updated);
         let image = project_updated::image(project_updated);
 
-        project::set_title(&mut project, title);
-        project::set_description(&mut project, description);
-        project::set_target(&mut project, target);
-        project::set_image(&mut project, image);
-        project
+        project::set_title(project, title);
+        project::set_description(project, description);
+        project::set_target(project, target);
+        project::set_image(project, image);
     }
-
 }

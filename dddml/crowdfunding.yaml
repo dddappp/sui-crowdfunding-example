@@ -66,6 +66,7 @@ aggregates:
             length: 200
         event:
           name: ProjectCreated
+          isObjectShared: true # Share the object after created.
           properties:
             Owner:
               type: address
@@ -75,6 +76,7 @@ aggregates:
               length: 200
               sequenceNumber: 30
       Update:
+        shouldCallByReference: true
         typeParameters:
           T: {}
         objectTypeArguments:
@@ -95,6 +97,7 @@ aggregates:
           name: ProjectUpdated
 
       Start:
+        shouldCallByReference: true
         typeParameters:
           T: {}
         objectTypeArguments:
@@ -105,7 +108,6 @@ aggregates:
             isIgnoredInEvent: true
         event:
           name: ProjectStarted
-          isObjectShared: true # Share the object after initialization.
           properties:
             deadline:
               type: u64

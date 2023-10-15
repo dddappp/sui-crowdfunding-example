@@ -39,12 +39,12 @@ module sui_crowdfunding_example::project_aggregate {
             ctx,
         );
         project::set_project_created_id(&mut project_created, project::id(&project));
-        project::transfer_object(project, tx_context::sender(ctx));
+        project::share_object(project);
         project::emit_project_created(project_created);
     }
 
     public entry fun update<T>(
-        project: project::Project<T>,
+        project: &mut project::Project<T>,
         title: String,
         description: String,
         target: u64,
@@ -56,34 +56,34 @@ module sui_crowdfunding_example::project_aggregate {
             description,
             target,
             image,
-            &project,
+            project,
             ctx,
         );
-        let updated_project = project_update_logic::mutate<T>(
+        project_update_logic::mutate<T>(
             &project_updated,
             project,
             ctx,
         );
-        project::update_version_and_transfer_object(updated_project, tx_context::sender(ctx));
+        project::update_object_version(project);
         project::emit_project_updated(project_updated);
     }
 
     public entry fun start<T>(
-        project: project::Project<T>,
+        project: &mut project::Project<T>,
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let project_started = project_start_logic::verify<T>(
             clock,
-            &project,
+            project,
             ctx,
         );
-        let updated_project = project_start_logic::mutate<T>(
+        project_start_logic::mutate<T>(
             &project_started,
             project,
             ctx,
         );
-        project::update_version_and_share_object(updated_project);
+        project::update_object_version(project);
         project::emit_project_started(project_started);
     }
 
