@@ -1,5 +1,9 @@
 # A Sui Crowdfunding Example
 
+## Test Application
+
+### Publish
+
 ```shell
 sui client publish --gas-budget 1000000000 --skip-dependency-verification
 ```
@@ -25,6 +29,8 @@ Array [
     },
     //...
 ```
+
+### Create & Start & Donate & Withdraw
 
 ```shell
 sui client call --package 0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3 --module project_aggregate --function create \
@@ -134,4 +140,111 @@ sui client merge-coin \
 --primary-coin 0x7b983b339f612c9ebb47727da6e1351725b90e73521c4da826226ab7b453af5a \
 --gas-budget 1000000000
 ```
+
+
+### Create & Start & Donate & Refund
+
+```shell
+sui client call --package 0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3 --module project_aggregate --function create \
+--type-args '0x2::sui::SUI' \
+--args \"0xa38aa80e7b09ca8614ef402520deca48c4821d193ae507c97418898d7d49c05a\" '"Mango Orchard Crowdfunding2"' '"This is a test2"' \"1000000000\" '""' \
+--gas-budget 1000000000
+```
+
+```text
+----- Object changes ----
+Array [
+    //...
+    Object {
+        "type": String("created"),
+        //...
+        "objectType": String("0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3::project::Project<0x2::sui::SUI>"),
+        "objectId": String("0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91"),
+        //...
+    },
+]
+```
+
+```shell
+sui client call --package 0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3 --module project_aggregate --function start \
+--type-args '0x2::sui::SUI' \
+--args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x6' \
+--gas-budget 1000000000
+```
+
+
+```shell
+sui client call --package 0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3 --module project_service --function donate \
+--type-args '0x2::sui::SUI' \
+--args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x7b983b339f612c9ebb47727da6e1351725b90e73521c4da826226ab7b453af5a' '0x6' '500000000' \
+--gas-budget 1000000000
+```
+
+
+```shell
+sui client call --package 0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3 --module project_service --function withdraw \
+--type-args '0x2::sui::SUI' \
+--args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x6' \
+--gas-budget 1000000000
+```
+
+```text
+Error executing transaction: Failure {
+    error: "MoveAbort(MoveLocation { module: ModuleId { address: f033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3, name: Identifier(\"project_withdraw_logic\") }, function: 0, instruction: 26, function_name: Some(\"verify\") }, 184) in command 0",
+}
+```
+
+```text
+Error executing transaction: Failure {
+    error: "MoveAbort(MoveLocation { module: ModuleId { address: f033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3, name: Identifier(\"project_withdraw_logic\") }, function: 0, instruction: 40, function_name: Some(\"verify\") }, 185) in command 0",
+}
+```
+
+
+
+```shell
+sui client call --package 0xf033ec079b048af82289a10c5e54caa177f1fda8804504014999f548f512caa3 --module project_service --function refund \
+--type-args '0x2::sui::SUI' \
+--args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x6' \
+--gas-budget 1000000000
+```
+
+
+```shell
+sui client gas
+```
+
+```text
+╭────────────────────────────────────────────────────────────────────┬────────────╮
+│ gasCoinId                                                          │ gasBalance │
+├────────────────────────────────────────────────────────────────────┼────────────┤
+│ 0x7b983b339f612c9ebb47727da6e1351725b90e73521c4da826226ab7b453af5a │ 4936293540 │
+│ 0x9179736ef65f706dbd34268265c16dbbd85f8d175b7f71550eb363bbea11e747 │ 500000000  │
+│ 0xf05fef49807794c12253978c49074b13e2f151dc31775f1cf2374a4f7e3e000b │ 1091209500 │
+╰────────────────────────────────────────────────────────────────────┴────────────╯
+```
+
+```shell
+sui client merge-coin \
+--coin-to-merge 0x9179736ef65f706dbd34268265c16dbbd85f8d175b7f71550eb363bbea11e747 \
+--primary-coin 0x7b983b339f612c9ebb47727da6e1351725b90e73521c4da826226ab7b453af5a \
+--gas-budget 1000000000
+```
+
+
+
+```shell
+sui client gas
+```
+
+```text
+╭────────────────────────────────────────────────────────────────────┬────────────╮
+│ gasCoinId                                                          │ gasBalance │
+├────────────────────────────────────────────────────────────────────┼────────────┤
+│ 0x7b983b339f612c9ebb47727da6e1351725b90e73521c4da826226ab7b453af5a │ 5436293540 │
+│ 0xf05fef49807794c12253978c49074b13e2f151dc31775f1cf2374a4f7e3e000b │ 1091167860 │
+╰────────────────────────────────────────────────────────────────────┴────────────╯
+```
+
+
 
