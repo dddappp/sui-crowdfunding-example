@@ -90,7 +90,24 @@ You need to fill in the business logic in the following files:
 * [project_update_logic.move](./sui-contracts/sources/project_update_logic.move). Implement the "Update Project" business logic in this file.
 * [project_withdraw_logic.move](./sui-contracts/sources/project_withdraw_logic.move). Implement the "Withdraw Project Funds" business logic in this file.
 
+Don't worry, as you can see, the function body part of these files that you need to fill in is very short.
 
+You need to check the client's input in the `verify` function, capture the information from input and context to generate an "event object".
+
+Then, in the `mutate` function, you need to modify the state of the objects, primarily by applying the information from the event object.
+
+---
+
+In [the model file](./dddml/crowdfunding.yaml), we define three methods, `Donate`, `Withdraw`, and `Refund`,
+which use Balance, a resource type, as type of parameters or return values.
+This makes these methods combinable. As a developer of Move, a "resource-oriented programming" language,
+you will already know this.
+
+However, it's not easy to call them directly from clients.
+So, we added this file [project_service.move](./sui-contracts/sources/project_service.move).
+In this file, three entry functions are provided to facilitate clients to use the corresponding features directly.
+
+That's the whole programming routine, isn't it simple?
 
 ## Test Application
 
@@ -127,6 +144,8 @@ Make sure you have at least 1 SUI Coin with a minimum balance of 2000000000 smal
 In the test environment, before publishing the contract, you can change the crowdfunding time limit to 1 minute.
 
 You can change the value of the `FIFTEEN_DAYS_IN_MS` const as prompted by the comments in the file `sui-contracts/sources/project_start_logic.move`.
+
+Execute the following command in the directory `sui-contracts` to publish the contract on the chain:
 
 ```shell
 sui client publish --gas-budget 1000000000 --skip-dependency-verification
