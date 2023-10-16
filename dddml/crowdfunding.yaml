@@ -76,7 +76,7 @@ aggregates:
               length: 200
               sequenceNumber: 30
       Update:
-        shouldCallByReference: true
+        #shouldCallByReference: true
         typeParameters:
           T: {}
         objectTypeArguments:
@@ -97,7 +97,7 @@ aggregates:
           name: ProjectUpdated
 
       Start:
-        shouldCallByReference: true
+        #shouldCallByReference: true
         typeParameters:
           T: {}
         objectTypeArguments:
@@ -113,7 +113,7 @@ aggregates:
               type: u64
 
       Donate:
-        shouldCallByReference: true
+        #shouldCallByReference: true
         typeParameters:
           T: {}
         objectTypeArguments:
@@ -132,7 +132,7 @@ aggregates:
             Amount:
               type: u64
       Withdraw:
-        shouldCallByReference: true
+        #shouldCallByReference: true
         typeParameters:
           T: {}
         objectTypeArguments:
@@ -149,7 +149,7 @@ aggregates:
             Amount:
               type: u64
       Refund:
-        shouldCallByReference: true
+        #shouldCallByReference: true
         typeParameters:
           T: {}
         objectTypeArguments:
@@ -194,7 +194,7 @@ singletonObjects:
 
       AddProject:
         isInternal: true
-        shouldCallByReference: true
+        #shouldCallByReference: true
         event:
           name: ProjectAddedToPlatform
         parameters:
