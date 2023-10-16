@@ -21,10 +21,10 @@ module sui_crowdfunding_example::project {
     friend sui_crowdfunding_example::project_refund_logic;
     friend sui_crowdfunding_example::project_aggregate;
 
-    const EID_ALREADY_EXISTS: u64 = 101;
-    const EDATA_TOO_LONG: u64 = 102;
-    const EINAPPROPRIATE_VERSION: u64 = 103;
-    const EID_NOT_FOUND: u64 = 106;
+    const EIdAlreadyExists: u64 = 101;
+    const EDataTooLong: u64 = 102;
+    const EInappropriateVersion: u64 = 103;
+    const EIdNotFound: u64 = 106;
 
     struct Project<phantom T> has key {
         id: UID,
@@ -60,7 +60,7 @@ module sui_crowdfunding_example::project {
     }
 
     public(friend) fun set_title<T>(project: &mut Project<T>, title: String) {
-        assert!(std::string::length(&title) <= 200, EDATA_TOO_LONG);
+        assert!(std::string::length(&title) <= 200, EDataTooLong);
         project.title = title;
     }
 
@@ -69,7 +69,7 @@ module sui_crowdfunding_example::project {
     }
 
     public(friend) fun set_description<T>(project: &mut Project<T>, description: String) {
-        assert!(std::string::length(&description) <= 2000, EDATA_TOO_LONG);
+        assert!(std::string::length(&description) <= 2000, EDataTooLong);
         project.description = description;
     }
 
@@ -94,7 +94,7 @@ module sui_crowdfunding_example::project {
     }
 
     public(friend) fun set_image<T>(project: &mut Project<T>, image: String) {
-        assert!(std::string::length(&image) <= 200, EDATA_TOO_LONG);
+        assert!(std::string::length(&image) <= 200, EDataTooLong);
         project.image = image;
     }
 
@@ -108,12 +108,12 @@ module sui_crowdfunding_example::project {
 
     public(friend) fun add_donation<T>(project: &mut Project<T>, donation: Donation) {
         let key = donation::donator(&donation);
-        assert!(!table::contains(&project.donations, key), EID_ALREADY_EXISTS);
+        assert!(!table::contains(&project.donations, key), EIdAlreadyExists);
         table::add(&mut project.donations, key, donation);
     }
 
     public(friend) fun remove_donation<T>(project: &mut Project<T>, donator: address) {
-        assert!(table::contains(&project.donations, donator), EID_NOT_FOUND);
+        assert!(table::contains(&project.donations, donator), EIdNotFound);
         let donation = table::remove(&mut project.donations, donator);
         donation::drop_donation(donation);
     }
@@ -143,9 +143,9 @@ module sui_crowdfunding_example::project {
         image: String,
         ctx: &mut TxContext,
     ): Project<T> {
-        assert!(std::string::length(&title) <= 200, EDATA_TOO_LONG);
-        assert!(std::string::length(&description) <= 2000, EDATA_TOO_LONG);
-        assert!(std::string::length(&image) <= 200, EDATA_TOO_LONG);
+        assert!(std::string::length(&title) <= 200, EDataTooLong);
+        assert!(std::string::length(&description) <= 2000, EDataTooLong);
+        assert!(std::string::length(&image) <= 200, EDataTooLong);
         Project {
             id: object::new(ctx),
             version: 0,
@@ -390,7 +390,7 @@ module sui_crowdfunding_example::project {
 
 
     public(friend) fun transfer_object<T>(project: Project<T>, recipient: address) {
-        assert!(project.version == 0, EINAPPROPRIATE_VERSION);
+        assert!(project.version == 0, EInappropriateVersion);
         transfer::transfer(project, recipient);
     }
 
@@ -400,7 +400,7 @@ module sui_crowdfunding_example::project {
     }
 
     public(friend) fun share_object<T>(project: Project<T>) {
-        assert!(project.version == 0, EINAPPROPRIATE_VERSION);
+        assert!(project.version == 0, EInappropriateVersion);
         transfer::share_object(project);
     }
 
@@ -410,7 +410,7 @@ module sui_crowdfunding_example::project {
     }
 
     public(friend) fun freeze_object<T>(project: Project<T>) {
-        assert!(project.version == 0, EINAPPROPRIATE_VERSION);
+        assert!(project.version == 0, EInappropriateVersion);
         transfer::freeze_object(project);
     }
 
@@ -421,7 +421,7 @@ module sui_crowdfunding_example::project {
 
     public(friend) fun update_object_version<T>(project: &mut Project<T>) {
         project.version = project.version + 1;
-        //assert!(project.version != 0, EINAPPROPRIATE_VERSION);
+        //assert!(project.version != 0, EInappropriateVersion);
     }
 
     public(friend) fun drop_project<T>(project: Project<T>) {

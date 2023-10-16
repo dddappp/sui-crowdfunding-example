@@ -12,7 +12,7 @@ module sui_crowdfunding_example::donation {
     friend sui_crowdfunding_example::project_refund_logic;
     friend sui_crowdfunding_example::project;
 
-    const EDATA_TOO_LONG: u64 = 102;
+    const EDataTooLong: u64 = 102;
 
     struct Donation has store {
         donator: address,

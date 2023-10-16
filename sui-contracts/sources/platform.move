@@ -15,8 +15,8 @@ module sui_crowdfunding_example::platform {
     friend sui_crowdfunding_example::platform_add_project_logic;
     friend sui_crowdfunding_example::platform_aggregate;
 
-    const EDATA_TOO_LONG: u64 = 102;
-    const EINAPPROPRIATE_VERSION: u64 = 103;
+    const EDataTooLong: u64 = 102;
+    const EInappropriateVersion: u64 = 103;
 
     fun init(witness: PLATFORM, ctx: &mut TxContext) {
         let platform = new_platform(
@@ -47,7 +47,7 @@ module sui_crowdfunding_example::platform {
     }
 
     public(friend) fun set_name(platform: &mut Platform, name: String) {
-        assert!(std::string::length(&name) <= 200, EDATA_TOO_LONG);
+        assert!(std::string::length(&name) <= 200, EDataTooLong);
         platform.name = name;
     }
 
@@ -114,7 +114,7 @@ module sui_crowdfunding_example::platform {
 
 
     public(friend) fun transfer_object(platform: Platform, recipient: address) {
-        assert!(platform.version == 0, EINAPPROPRIATE_VERSION);
+        assert!(platform.version == 0, EInappropriateVersion);
         transfer::transfer(platform, recipient);
     }
 
@@ -124,7 +124,7 @@ module sui_crowdfunding_example::platform {
     }
 
     public(friend) fun share_object(platform: Platform) {
-        assert!(platform.version == 0, EINAPPROPRIATE_VERSION);
+        assert!(platform.version == 0, EInappropriateVersion);
         transfer::share_object(platform);
     }
 
@@ -134,7 +134,7 @@ module sui_crowdfunding_example::platform {
     }
 
     public(friend) fun freeze_object(platform: Platform) {
-        assert!(platform.version == 0, EINAPPROPRIATE_VERSION);
+        assert!(platform.version == 0, EInappropriateVersion);
         transfer::freeze_object(platform);
     }
 
@@ -145,7 +145,7 @@ module sui_crowdfunding_example::platform {
 
     public(friend) fun update_object_version(platform: &mut Platform) {
         platform.version = platform.version + 1;
-        //assert!(platform.version != 0, EINAPPROPRIATE_VERSION);
+        //assert!(platform.version != 0, EInappropriateVersion);
     }
 
     public(friend) fun drop_platform(platform: Platform) {
