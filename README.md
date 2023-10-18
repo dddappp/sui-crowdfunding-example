@@ -498,5 +498,38 @@ The output is similar to the following:
 ╰────────────────────────────────────────────────────────────────────┴────────────╯
 ```
 
+##  Further Reading
 
+### Requirements
+
+Below are the project requirements.
+
+**Overview**: We want to create a dApp for crowdfunding projects. Users can list their projects with a specific funding target and deadline to achieve it.
+
+For example, Dan wants to raise 5,000 Mango tokens for his Mango Orchard by November 10th. The project will be listed and other users can fund it by paying Mango tokens. If the target of 5,000 Mango tokens is not reached by November 10th, the funding amount will be returned to the supporters. If the target is met, the amount will be sent to Dan.
+
+We only need the smart contract, without a frontend.
+
+*  The smart contract should enable users to create project listings, receive funds from supporters, and distribute funds to the project creator if the funding goals are met.
+*  Funds will be locked in the smart contract until a specified funding goal, set by the project creator, is reached. If not met, funds will be returned to the supporters.
+*  Each project must have a 15-day time limit from the date it starts, which will be managed by the smart contract.
+*  The smart contract code must include comments to explain how it works.
+*  The dApp should have its own native token that users can use to fund a project.
+
+
+### Sui Blog Example
+
+Repository: https://github.com/dddappp/sui-blog-example
+
+It only requires 30 or so lines of code (all of which is a description of the domain model) to be written by the developer, and then generates a blog example that emulates [RoR Getting Started](https://guides.rubyonrails.org/getting_started.html) in one click, without requiring the developer to write a single line of other code.
+
+
+### A More Complex Sui Demo
+
+If you are interested, you can find a more complex Sui Demo here: ["A Sui Demo"](https://github.com/dddappp/A-Sui-Demo).
+
+
+### Rooch Blog Example
+
+Here is a Rooch version like above Sui blog example: https://github.com/rooch-network/rooch/blob/main/examples/blog/README.md
 
