@@ -1,5 +1,6 @@
-# A Sui Crowdfunding Example
+# Sui Crowdfunding Example
 
+This is a Sui Move sample project for teaching purposes. The client is a Web3 developer education institution.
 
 ## Prerequisites
 
