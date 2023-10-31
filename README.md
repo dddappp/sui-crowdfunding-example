@@ -2,6 +2,10 @@
 
 This is a Sui Move sample project for teaching purposes. The client is a Web3 developer education institution.
 
+If you're interested in what your client's requirements are, you can read the "Requirements" section at the end of this article.
+
+Below, let's introduce the development process of this sample application using [dddappp](https://www.dddappp.org) low-code tool.
+
 ## Prerequisites
 
 Currently, the dddappp low-code tool is published as a Docker image for developers to experience.
