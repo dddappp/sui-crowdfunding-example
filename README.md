@@ -41,7 +41,7 @@ docker rm $(docker ps -aq --filter "ancestor=wubuku/dddappp:0.0.1")
 # remove the image
 docker image rm wubuku/dddappp:0.0.1
 # pull the image
-git pull wubuku/dddappp:0.0.1
+docker pull wubuku/dddappp:0.0.1
 ```
 
 ---
