@@ -109,7 +109,7 @@ aggregates:
         event:
           name: ProjectStarted
           properties:
-            deadline:
+            Deadline:
               type: u64
 
       Donate:
