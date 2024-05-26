@@ -15,12 +15,14 @@ module sui_crowdfunding_example::platform {
     friend sui_crowdfunding_example::platform_add_project_logic;
     friend sui_crowdfunding_example::platform_aggregate;
 
+    #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
+    #[allow(unused_const)]
     const EInappropriateVersion: u64 = 103;
 
-    fun init(witness: PLATFORM, ctx: &mut TxContext) {
+    fun init(otw: PLATFORM, ctx: &mut TxContext) {
         let platform = new_platform(
-            witness,
+            otw,
             ctx,
         );
         event::emit(new_init_platform_event(&platform));
@@ -49,6 +51,14 @@ module sui_crowdfunding_example::platform {
     public(friend) fun set_name(platform: &mut Platform, name: String) {
         assert!(std::string::length(&name) <= 200, EDataTooLong);
         platform.name = name;
+    }
+
+    public fun borrow_projects(platform: &Platform): &vector<ID> {
+        &platform.projects
+    }
+
+    public(friend) fun borrow_mut_projects(platform: &mut Platform): &mut vector<ID> {
+        &mut platform.projects
     }
 
     public fun projects(platform: &Platform): vector<ID> {
@@ -113,34 +123,10 @@ module sui_crowdfunding_example::platform {
     }
 
 
-    public(friend) fun transfer_object(platform: Platform, recipient: address) {
-        assert!(platform.version == 0, EInappropriateVersion);
-        transfer::transfer(platform, recipient);
-    }
-
-    public(friend) fun update_version_and_transfer_object(platform: Platform, recipient: address) {
-        update_object_version(&mut platform);
-        transfer::transfer(platform, recipient);
-    }
-
+    #[lint_allow(share_owned)]
     public(friend) fun share_object(platform: Platform) {
         assert!(platform.version == 0, EInappropriateVersion);
         transfer::share_object(platform);
-    }
-
-    public(friend) fun update_version_and_share_object(platform: Platform) {
-        update_object_version(&mut platform);
-        transfer::share_object(platform);
-    }
-
-    public(friend) fun freeze_object(platform: Platform) {
-        assert!(platform.version == 0, EInappropriateVersion);
-        transfer::freeze_object(platform);
-    }
-
-    public(friend) fun update_version_and_freeze_object(platform: Platform) {
-        update_object_version(&mut platform);
-        transfer::freeze_object(platform);
     }
 
     public(friend) fun update_object_version(platform: &mut Platform) {

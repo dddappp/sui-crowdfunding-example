@@ -17,6 +17,7 @@ module sui_crowdfunding_example::project_aggregate {
     use sui_crowdfunding_example::project_update_logic;
     use sui_crowdfunding_example::project_withdraw_logic;
 
+    #[allow(unused_mut_parameter)]
     public entry fun create<T>(
         platform: &mut Platform,
         title: String,
@@ -43,6 +44,7 @@ module sui_crowdfunding_example::project_aggregate {
         project::emit_project_created(project_created);
     }
 
+    #[allow(unused_mut_parameter)]
     public entry fun update<T>(
         project: &mut project::Project<T>,
         title: String,
@@ -68,6 +70,7 @@ module sui_crowdfunding_example::project_aggregate {
         project::emit_project_updated(project_updated);
     }
 
+    #[allow(unused_mut_parameter)]
     public entry fun start<T>(
         project: &mut project::Project<T>,
         clock: &Clock,
@@ -87,6 +90,7 @@ module sui_crowdfunding_example::project_aggregate {
         project::emit_project_started(project_started);
     }
 
+    #[allow(unused_mut_parameter)]
     public fun donate<T>(
         project: &mut project::Project<T>,
         amount: Balance<T>,
@@ -109,6 +113,7 @@ module sui_crowdfunding_example::project_aggregate {
         project::emit_donation_received(donation_received);
     }
 
+    #[allow(unused_mut_parameter)]
     public fun withdraw<T>(
         project: &mut project::Project<T>,
         clock: &Clock,
@@ -129,6 +134,7 @@ module sui_crowdfunding_example::project_aggregate {
         withdraw_return
     }
 
+    #[allow(unused_mut_parameter)]
     public fun refund<T>(
         project: &mut project::Project<T>,
         clock: &Clock,

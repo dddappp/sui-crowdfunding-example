@@ -22,9 +22,12 @@ module sui_crowdfunding_example::project {
     friend sui_crowdfunding_example::project_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
+    #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
+    #[allow(unused_const)]
     const EInappropriateVersion: u64 = 103;
-    const EIdNotFound: u64 = 106;
+    const EEmptyObjectID: u64 = 107;
+    const EIdNotFound: u64 = 111;
 
     struct Project<phantom T> has key {
         id: UID,
@@ -98,7 +101,7 @@ module sui_crowdfunding_example::project {
         project.image = image;
     }
 
-    public(friend) fun borrow_vault<T>(project: &Project<T>): &Balance<T> {
+    public fun borrow_vault<T>(project: &Project<T>): &Balance<T> {
         &project.vault
     }
 
@@ -207,6 +210,7 @@ module sui_crowdfunding_example::project {
         project_created.token_type
     }
 
+    #[allow(unused_type_parameter)]
     public(friend) fun new_project_created<T>(
         platform_id: ID,
         owner: address,
@@ -257,6 +261,7 @@ module sui_crowdfunding_example::project {
         project_updated.image
     }
 
+    #[allow(unused_type_parameter)]
     public(friend) fun new_project_updated<T>(
         project: &Project<T>,
         title: String,
@@ -288,6 +293,7 @@ module sui_crowdfunding_example::project {
         project_started.deadline
     }
 
+    #[allow(unused_type_parameter)]
     public(friend) fun new_project_started<T>(
         project: &Project<T>,
         deadline: u64,
@@ -318,6 +324,7 @@ module sui_crowdfunding_example::project {
         donation_received.amount
     }
 
+    #[allow(unused_type_parameter)]
     public(friend) fun new_donation_received<T>(
         project: &Project<T>,
         donator: address,
@@ -345,6 +352,7 @@ module sui_crowdfunding_example::project {
         vault_withdrawn.amount
     }
 
+    #[allow(unused_type_parameter)]
     public(friend) fun new_vault_withdrawn<T>(
         project: &Project<T>,
         amount: u64,
@@ -375,6 +383,7 @@ module sui_crowdfunding_example::project {
         donation_refunded.amount
     }
 
+    #[allow(unused_type_parameter)]
     public(friend) fun new_donation_refunded<T>(
         project: &Project<T>,
         donator: address,
@@ -389,34 +398,10 @@ module sui_crowdfunding_example::project {
     }
 
 
-    public(friend) fun transfer_object<T>(project: Project<T>, recipient: address) {
-        assert!(project.version == 0, EInappropriateVersion);
-        transfer::transfer(project, recipient);
-    }
-
-    public(friend) fun update_version_and_transfer_object<T>(project: Project<T>, recipient: address) {
-        update_object_version(&mut project);
-        transfer::transfer(project, recipient);
-    }
-
+    #[lint_allow(share_owned)]
     public(friend) fun share_object<T>(project: Project<T>) {
         assert!(project.version == 0, EInappropriateVersion);
         transfer::share_object(project);
-    }
-
-    public(friend) fun update_version_and_share_object<T>(project: Project<T>) {
-        update_object_version(&mut project);
-        transfer::share_object(project);
-    }
-
-    public(friend) fun freeze_object<T>(project: Project<T>) {
-        assert!(project.version == 0, EInappropriateVersion);
-        transfer::freeze_object(project);
-    }
-
-    public(friend) fun update_version_and_freeze_object<T>(project: Project<T>) {
-        update_object_version(&mut project);
-        transfer::freeze_object(project);
     }
 
     public(friend) fun update_object_version<T>(project: &mut Project<T>) {
@@ -443,6 +428,7 @@ module sui_crowdfunding_example::project {
     }
 
     public(friend) fun emit_project_created(project_created: ProjectCreated) {
+        assert!(std::option::is_some(&project_created.id), EEmptyObjectID);
         event::emit(project_created);
     }
 

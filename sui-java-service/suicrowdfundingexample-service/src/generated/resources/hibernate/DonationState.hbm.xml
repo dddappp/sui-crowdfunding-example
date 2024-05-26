@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.test.suicrowdfundingexample.domain.project">
+  <class name="org.test.suicrowdfundingexample.domain.project.AbstractDonationState$SimpleDonationState" table="donation">
+    <composite-id name="projectDonationId" class="org.test.suicrowdfundingexample.domain.project.ProjectDonationId">
+      <key-property name="projectId">
+        <column name="project_donation_id_project_id" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="donator">
+        <column name="project_donation_id_donator" sql-type="VARCHAR(66)" />
+      </key-property>
+    </composite-id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <many-to-one name="protectedProjectState" class="org.test.suicrowdfundingexample.domain.project.AbstractProjectState$SimpleProjectState" insert="false" update="false">
+      <column name="project_donation_id_project_id" />
+    </many-to-one>
+    <property name="amount">
+      <column name="amount" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+  </class>
+</hibernate-mapping>

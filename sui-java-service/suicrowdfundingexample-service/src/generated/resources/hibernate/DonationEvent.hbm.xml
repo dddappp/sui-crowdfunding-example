@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.test.suicrowdfundingexample.domain.project">
+  <class name="AbstractDonationEvent" table="donation_event" abstract="true">
+    <composite-id name="donationEventId" class="org.test.suicrowdfundingexample.domain.project.DonationEventId">
+      <key-property name="projectId">
+        <column name="project_donation_id_project_id" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="donator">
+        <column name="project_donation_id_donator" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="version">
+        <column name="version" sql-type="DECIMAL(20,0)" />
+      </key-property>
+    </composite-id>
+    <discriminator column="event_type" type="string" />
+    <property name="createdBy" column="created_by" />
+    <property name="createdAt" column="created_at" />
+    <property name="commandId" column="command_id" />
+  </class>
+</hibernate-mapping>

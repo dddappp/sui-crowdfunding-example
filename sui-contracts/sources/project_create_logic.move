@@ -1,3 +1,4 @@
+#[allow(unused_mut_parameter)]
 module sui_crowdfunding_example::project_create_logic {
     use std::string;
     use std::string::String;

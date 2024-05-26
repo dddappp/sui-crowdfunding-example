@@ -1,2 +1,7 @@
-sui-java-service
+.idea
+build
 sui-contracts/build
+sui-contracts/.idea
+sui-java-service/*/build
+sui-java-service/*/target
+sui-java-service/.idea

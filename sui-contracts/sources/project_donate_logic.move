@@ -1,3 +1,4 @@
+#[allow(unused_use)]
 module sui_crowdfunding_example::project_donate_logic {
     use sui::balance;
     use sui::balance::Balance;

@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/suicrowdfundingexample_m2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
+    username: root
+    password: 123456
+#    url: jdbc:mysql://localhost/suicrowdfundingexample_m2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
+#    username: root
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+
+server:
+  port: 8024
+
+sui:
+  contract:
+    jsonrpc:
+      #url: "https://fullnode.devnet.sui.io/"
+      #url: "https://fullnode.testnet.sui.io/"
+      #url: "http://localhost:9000"
+      url: "https://sui.devnet.m2.movementlabs.xyz/"
+    #package-publish-transaction: "BHNzX6pujWwSS1gJPrYuA3HSKdZc7oBKmb4hTiVHGi3x"
+    package-publish-transaction: "HvTguer3s3ha1vYEqZAa5azpRWeCcadDuBptW4KiRtP1"

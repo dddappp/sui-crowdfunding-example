@@ -21,6 +21,7 @@ module sui_crowdfunding_example::project_service {
         project_aggregate::donate(project, coin::into_balance(a), clock, ctx);
     }
 
+    #[allow(lint(self_transfer))]
     public fun withdraw<T>(
         project: &mut Project<T>,
         clock: &Clock,
@@ -31,6 +32,7 @@ module sui_crowdfunding_example::project_service {
         transfer::public_transfer(c, tx_context::sender(ctx));
     }
 
+    #[allow(lint(self_transfer))]
     public fun refund<T>(
         project: &mut Project<T>,
         clock: &Clock,

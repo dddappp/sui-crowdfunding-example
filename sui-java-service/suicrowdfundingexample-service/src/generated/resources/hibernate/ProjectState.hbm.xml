@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.test.suicrowdfundingexample.domain.project">
+  <class name="org.test.suicrowdfundingexample.domain.project.AbstractProjectState$SimpleProjectState" table="project">
+    <id name="id" length="66">
+      <column name="id" sql-type="VARCHAR(66)" />
+      <generator class="assigned" />
+    </id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <set name="protectedDonations" inverse="true" cascade="all-delete-orphan" fetch="join">
+      <key>
+        <column name="project_donation_id_project_id" />
+      </key>
+      <one-to-many class="org.test.suicrowdfundingexample.domain.project.AbstractDonationState$SimpleDonationState" />
+    </set>
+    <property name="owner">
+      <column name="owner" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="title">
+      <column name="title" length="200" />
+    </property>
+    <property name="description">
+      <column name="description" length="2000" />
+    </property>
+    <property name="target">
+      <column name="target" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="deadline">
+      <column name="deadline" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="image">
+      <column name="image" length="200" />
+    </property>
+    <property name="vault">
+      <column name="vault" />
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="typeArgumentT">
+      <column name="type_argument_t" length="255" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+  </class>
+</hibernate-mapping>

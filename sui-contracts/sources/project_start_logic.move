@@ -10,7 +10,8 @@ module sui_crowdfunding_example::project_start_logic {
     const ENOT_PROJECT_OWNER: u64 = 186;
 
     //const FIFTEEN_DAYS_IN_MS: u64 = 15 * 24 * 60 * 60 * 1000; // <- In a production environment, use this
-    const FIFTEEN_DAYS_IN_MS: u64 = 60 * 1000; // <- Only 60 seconds for testing!!!
+    const FIFTEEN_DAYS_IN_MS: u64 = 5 * 60 * 1000; // <- Only 5 minutes for testing!!!
+    //const FIFTEEN_DAYS_IN_MS: u64 = 60 * 1000; // <- Only 60 seconds for testing!!!
 
     public(friend) fun verify<T>(
         clock: &Clock,

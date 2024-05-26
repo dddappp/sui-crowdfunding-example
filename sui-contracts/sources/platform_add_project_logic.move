@@ -1,3 +1,4 @@
+#[allow(unused_use, unused_mut_parameter)]
 module sui_crowdfunding_example::platform_add_project_logic {
     use std::vector;
     use sui::object::ID;
@@ -21,7 +22,7 @@ module sui_crowdfunding_example::platform_add_project_logic {
     public(friend) fun mutate(
         project_added_to_platform: &platform::ProjectAddedToPlatform,
         platform: &mut platform::Platform,
-        ctx: &TxContext, // modify the reference to mutable if needed
+        ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
         let _ = ctx;
         let project_id = project_added_to_platform::project_id(project_added_to_platform);
