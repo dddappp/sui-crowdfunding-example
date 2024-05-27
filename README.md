@@ -198,7 +198,9 @@ The command parameters above are straightforward:
 
 * This line `-v .:/myapp \` indicates mounting the local current directory into the `/myapp` directory inside the container.
 * `dddmlDirectoryPath` is the directory where the DDDML model files are located. It should be a directory path that can be read in the container.
-* Understand the value of the `boundedContextName` parameter as the name of the application you want to develop. When the name has multiple parts, separate them with dots and use the PascalCase naming convention for each part. Bounded-context is a term in Domain-driven design (DDD) that refers to a specific problem domain scope that contains specific business boundaries, constraints, and language. If you cannot understand this concept for the time being, it is not a big deal.
+* Understand the value of the `boundedContextName` parameter as the name of the application you want to develop. When the name has multiple parts, separate them with dots and use the PascalCase naming convention for each part. 
+    Bounded-context is a term in Domain-driven design (DDD) that refers to a specific problem domain scope that contains specific business boundaries, constraints, and language. 
+    If you cannot understand this concept for the time being, it is not a big deal.
 * `boundedContextJavaPackageName` is the Java package name of the off-chain service. According to Java naming conventions, it should be all lowercase and the parts should be separated by dots.
 * `boundedContextSuiPackageName` is the package name of the on-chain Sui contracts. According to the Sui development convention, it should be named in snake_case style with all lowercase letters.
 * `javaProjectsDirectoryPath` is the directory path where the off-chain service code is placed. The off-chain service consists of multiple modules (projects). It should be a readable and writable directory path in the container.
@@ -294,10 +296,14 @@ the `objectId` is `0x0cb4d8927585dcc2012c51284fcd7b7a616968c717c2c879fe56e7d08b9
 In the following example commands we will use these IDs directly,
 in your test environment you will need to replace them with your actual values.
 
+Record the publishing transaction digest, if you want to test off-chain service later.
+
 
 ### Create & Start & Donate & Withdraw
 
-#### Create
+#### Create project
+
+Assume that you want to create a project to raise 0.1 coin for a Mango Orchard.
 
 Create a crowdfunding project:
 
@@ -334,7 +340,9 @@ You can view the state of an object like this:
 sui client object 0x86f48589f321d357f2834656e8c2f32474c44ad00a4e72547480b9e288e1d72e
 ```
 
-#### Start
+#### Start project
+
+Note that the deadline of the project is calculated from the time it starts.
 
 Start the project:
 
@@ -347,7 +355,7 @@ sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57
 
 Next, let's prepare to donate to this project.
 
-#### Donate
+#### Donate project
 
 In less than 5 minutes after having started the project, you can donate it:
 
@@ -373,7 +381,8 @@ sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57
 --gas-budget 1000000000
 ```
 
-#### Cleanup: merge coins
+
+### Cleanup: merge coins
 
 To facilitate the next test, we can Merge the excess coin objects in the wallet.
 
@@ -395,7 +404,7 @@ The output is similar to the following:
 ╰────────────────────────────────────────────────────────────────────┴────────────────────┴──────────────────╯
 ```
 
-You can see that there is an additional Sui coin in the wallet and the balance is the amount raised by the project.
+You can see that there is an additional coin object in the wallet and the balance is the amount raised by the project.
 
 You can merge two of the coins like below, too many coins may not be convenient for more testing:
 
@@ -409,18 +418,22 @@ sui client merge-coin \
 
 ### Create & Start & Donate & Refund
 
-#### Create
+#### Create Project
+
+Assume that you want to create a project to raise 0.5 coin for a Mango Orchard.
 
 ```shell
 sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57a4f928d7d3a9 --module project_aggregate --function create \
 --type-args '0x2::sui::SUI' \
---args \"0x0cb4d8927585dcc2012c51284fcd7b7a616968c717c2c879fe56e7d08b9a9d47\" '"Mango Orchard Crowdfunding2"' '"This is a test project"' \"1000000000\" '""' \
+--args \"0x0cb4d8927585dcc2012c51284fcd7b7a616968c717c2c879fe56e7d08b9a9d47\" \
+'"Mango Orchard Crowdfunding2"' '"This is a test project"' \
+\"500000000\" '""' \
 --gas-budget 1000000000
 ```
 
 Assume that the created project object ID is `0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91`.
 
-#### Start
+#### Start project
 
 Start the project:
 
@@ -431,18 +444,20 @@ sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57
 --gas-budget 1000000000
 ```
 
-#### Donate
+#### Donate project
 
-In less than 5 minute after having started the project, you can donate it:
+In less than 5 minute after having started the project, you can donate it.
+Assume that you want to donate 0.3 coin to the project:
 
 ```shell
 sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57a4f928d7d3a9 --module project_service --function donate \
 --type-args '0x2::sui::SUI' \
---args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x1ed9b740efd757ed9135b4e1d53ea8974ee4fa7dda566ae9b9cce32c4f56dba4' '0x6' '500000000' \
+--args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" \
+'0x1ed9b740efd757ed9135b4e1d53ea8974ee4fa7dda566ae9b9cce32c4f56dba4' '0x6' \
+'300000000' \
 --gas-budget 1000000000
 ```
 
-You donated 0.5 SUI to the project using the above command.
 
 #### The withdrawals should fail
 
@@ -463,7 +478,8 @@ Error executing transaction: Failure {
 }
 ```
 
-It is assumed that no one else will donate to the project. 5 minute later, the project owner tries to withdraw the funds again. The output is similar to the following:
+It is assumed that no one else will donate to the project. 
+5 minute later, the project owner tries to withdraw the funds again. The output is similar to the following:
 
 ```text
 Error executing transaction: Failure {
@@ -471,7 +487,8 @@ Error executing transaction: Failure {
 }
 ```
 
-You can see that the error code in the output has changed (`184` -> `185`). You can find what these codes represent in the source file `project_withdraw_logic.move`.
+You can see that the error code in the output has changed (`184` -> `185`). 
+You can find what these codes represent in the source file `project_withdraw_logic.move`.
 
 #### Refund
 
@@ -497,7 +514,7 @@ After the above test, you should see two project object IDs in the output messag
 
 ### Test Off-Chain Service (indexer)
 
-#### Configuring off-chain Service
+#### Configuring off-chain service
 
 Open the `application-test.yml` file located in the directory 
 `sui-java-service/suicrowdfundingexample-service-rest/src/main/resources` and set the publishing transaction digest.
@@ -505,17 +522,21 @@ Open the `application-test.yml` file located in the directory
 After setting, it should look like this:
 
 ```yaml
+# ...
+server:
+  port: 8024
+
 sui:
   contract:
     jsonrpc:
-      url: "https://fullnode.devnet.sui.io/"
-    package-publish-transaction: "267z86Ge4Phdow8AH424uw9WPqBhrGSUbjMsuA6cpEzp"
+      url: "https://sui.devnet.m2.movementlabs.xyz/"
+    package-publish-transaction: "HvTguer3s3ha1vYEqZAa5azpRWeCcadDuBptW4KiRtP1"
 ```
 
 This is the only place where off-chain service need to be configured, and it's that simple.
 
 
-#### Creating a database for off-chain service
+#### Creating and initializing a database for off-chain service
 
 Use a MySQL client to connect to the local MySQL server and execute the following script to create an empty database (assuming the name is `suicrowdfundingexample_m2`):
 
