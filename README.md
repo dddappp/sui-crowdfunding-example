@@ -126,7 +126,7 @@ Use the following command to transfer 0.1 coin to this address:
 sui client pay-sui --amounts 100000000 \
 --recipients 0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2 \
 --input-coins 0x1ed9b740efd757ed9135b4e1d53ea8974ee4fa7dda566ae9b9cce32c4f56dba4 \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 Which will split the original one Coin into two.
@@ -350,7 +350,7 @@ Start the project:
 sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57a4f928d7d3a9 --module project_aggregate --function start \
 --type-args '0x2::sui::SUI' \
 --args \"0x86f48589f321d357f2834656e8c2f32474c44ad00a4e72547480b9e288e1d72e\" '0x6' \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 Next, let's prepare to donate to this project.
@@ -378,7 +378,7 @@ Waiting for 5 minutes, as the owner of the project, you can take out the funds.
 sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57a4f928d7d3a9 --module project_service --function withdraw \
 --type-args '0x2::sui::SUI' \
 --args \"0x86f48589f321d357f2834656e8c2f32474c44ad00a4e72547480b9e288e1d72e\" '0x6' \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 
@@ -428,7 +428,7 @@ sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57
 --args \"0x0cb4d8927585dcc2012c51284fcd7b7a616968c717c2c879fe56e7d08b9a9d47\" \
 '"Mango Orchard Crowdfunding2"' '"This is a test project"' \
 \"500000000\" '""' \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 Assume that the created project object ID is `0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91`.
@@ -441,7 +441,7 @@ Start the project:
 sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57a4f928d7d3a9 --module project_aggregate --function start \
 --type-args '0x2::sui::SUI' \
 --args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x6' \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 #### Donate project
@@ -455,7 +455,7 @@ sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57
 --args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" \
 '0x1ed9b740efd757ed9135b4e1d53ea8974ee4fa7dda566ae9b9cce32c4f56dba4' '0x6' \
 '300000000' \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 
@@ -467,7 +467,7 @@ If within 5 minute after the project has started, the owner of the project wants
 sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57a4f928d7d3a9 --module project_service --function withdraw \
 --type-args '0x2::sui::SUI' \
 --args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x6' \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 Well, it can't be successful. The output is similar to the following:
@@ -498,7 +498,7 @@ Because the deadline has been reached and the funding goal was not met, the dono
 sui client call --package 0xf59bf95203107c34cbb80b5a234fec78dfb645a4f81fd70f1f57a4f928d7d3a9 --module project_service --function refund \
 --type-args '0x2::sui::SUI' \
 --args \"0x74569d20afb16698a02deb46d196c628189d18666a1786bf3e85b4f41a111f91\" '0x6' \
---gas-budget 1000000000
+--gas-budget 100000000
 ```
 
 #### View state of the platform
